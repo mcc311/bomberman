@@ -3,12 +3,24 @@ import pygame
 
 class Bomb:
     def __init__(self,pos_x, pos_y):
-        self.pos_x = (pos_x+20)//40 * 40
-        self.pos_y = (pos_y+20)//40 * 40 
+        self.pos_x = pos_x
+        self.pos_y = pos_y 
         self.timer = 0
-    
+        self.Type = 'bomb'
+        self.attack_range = 1
     def draw(self,win):
         pygame.draw.rect(win, (0,255,0), (self.pos_x+10, self.pos_y + 10, 20, 20) )
+
+    def kill(self, player_list):
+        for player in player_list:
+            if  (player.pos_x == self.pos_x - 40*self.attack_range and player.pos_y == self.pos_y) or\
+                (player.pos_x == self.pos_x + 40*self.attack_range and player.pos_y == self.pos_y) or\
+                (player.pos_x == self.pos_x  and player.pos_y == self.pos_y + 40*self.attack_range) or\
+                (player.pos_x == self.pos_x  and player.pos_y == self.pos_y - 40*self.attack_range):
+                player.alive = False
+                player_list.pop(player_list.index(player))
+                
+
 
 
 class Bomb_List:
@@ -20,19 +32,19 @@ class Bomb_List:
         for bomb in self.list:
             bomb.draw(windows)
 
-
-
-    def clean(self,msec):
+    def clean(self,msec,player_list):
         for bomb in self.list:
             if bomb.timer >= 2000:
+                bomb.kill(player_list)
                 self.list.pop(self.list.index(bomb))
+
             else:
                 bomb.timer += msec
 
 
 class Bomb_List1(Bomb_List):
     def update(self,keys):
-        if keys[pygame.K_z]:
+        if keys[pygame.K_q]:
             if len(self.list) < 2:
                 if len(self.list):
                     for bomb in self.list:
@@ -45,7 +57,7 @@ class Bomb_List1(Bomb_List):
 
 class Bomb_List2(Bomb_List):
     def update(self,keys):
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_m]:
             if len(self.list) < 2:
                 if len(self.list):
                     for bomb in self.list:

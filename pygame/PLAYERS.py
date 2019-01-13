@@ -8,6 +8,7 @@ class Players:
         self.width = width
         self.height = height
         self.Type = Type
+        self.alive = True
         self.vel = 40
         self.counter = True
     def draw(self,windows):
@@ -30,48 +31,56 @@ class Players:
     
 
 class Player1(Players):
-    def update(self,keys,bg_size):
+    def update(self,keys,bg_size,locs):
         if keys[pygame.K_a]:
             self.direction = 'left'
-            self.pos_x -= self.vel
-            if self.pos_x <= 0:
-                self.pos_x = 0
+            if locs.collision_detect(self):
+                self.pos_x -= self.vel
+                if self.pos_x <= 0:
+                    self.pos_x = 0
         if keys[pygame.K_d]:
             self.direction = 'right'
-            self.pos_x += self.vel
-            if self.pos_x >= bg_size[0] - self.width:
-                self.pos_x = bg_size[0] - self.width
+            if locs.collision_detect(self):
+                self.pos_x += self.vel
+                if self.pos_x >= bg_size[0] - self.width:
+                    self.pos_x = bg_size[0] - self.width
         if keys[pygame.K_w]:
             self.direction = 'up'
-            self.pos_y -= self.vel
-            if self.pos_y <= 0:
-                self.pos_y = 0
+            if locs.collision_detect(self):
+                self.pos_y -= self.vel
+                if self.pos_y <= 0:
+                    self.pos_y = 0
         if keys[pygame.K_s]:
             self.direction = 'down'
-            self.pos_y += self.vel
-            if self.pos_y >= bg_size[1] - self.height:
-                self.pos_y = bg_size[1] - self.height
+            if locs.collision_detect(self):
+                self.pos_y += self.vel
+                if self.pos_y >= bg_size[1] - self.height:
+                    self.pos_y = bg_size[1] - self.height
     
 class Player2(Players):
-    def update(self,keys,bg_size):
+    def update(self,keys,bg_size, locs):
         if keys[pygame.K_LEFT]:
             self.direction = 'left'
-            self.pos_x -= self.vel
-            if self.pos_x <= 0:
-                self.pos_x = 0
+            if locs.collision_detect(self):
+                self.pos_x -= self.vel
+                if self.pos_x <= 0:
+                    self.pos_x = 0
         if keys[pygame.K_RIGHT]:
             self.direction = 'right'
-            self.pos_x += self.vel
-            if self.pos_x >= bg_size[0] - 40:
-                self.pos_x = bg_size[0] - 40
+            if locs.collision_detect(self):
+                self.pos_x += self.vel
+                if self.pos_x >= bg_size[0] - 40:
+                    self.pos_x = bg_size[0] - 40
         if keys[pygame.K_UP]:
             self.direction = 'up'
-            self.pos_y -= self.vel
-            if self.pos_y <= 0:
-                self.pos_y = 0
+            if locs.collision_detect(self):
+                self.pos_y -= self.vel
+                if self.pos_y <= 0:
+                    self.pos_y = 0
         if keys[pygame.K_DOWN]:
             self.direction = 'down'
-            self.pos_y += self.vel
-            if self.pos_y >= bg_size[1] - 40:
-                self.pos_y = bg_size[1] - 40
+            if locs.collision_detect(self):
+                self.pos_y += self.vel
+                if self.pos_y >= bg_size[1] - 40:
+                    self.pos_y = bg_size[1] - 40
 

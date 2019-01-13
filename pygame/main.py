@@ -2,18 +2,17 @@ import pygame
 import PLAYERS as pls
 import bomb as bmb
 import BOX as bx
-import FUNCTION as fnc
+import OBJECT_LIST as obj
 import json
 
 def redraw():
     windows.blit(bg,(0,0))
-    player1.draw(windows)
-    player2.draw(windows)
+    for player in players:
+        player.draw(windows)
     bomb1.draw(windows)
     bomb2.draw(windows)
     box.draw(windows)
     pygame.display.update()
-
 
 
 #########BOX##############
@@ -23,30 +22,36 @@ box = bx.Box_List()
 box.update(box_loc)
 #########################
 
+###############Players_Setting###############
+player1 = pls.Player1(0,0,40,40,'player1')
+player2 = pls.Player2(560,480,40,40,'player2')
+players = [player1, player2]
+#############################################
+
+#########Bomb_Setting###########
+bomb1 = bmb.Bomb_List1(player1)
+bomb2 = bmb.Bomb_List2(player2)
+################################
+
+
 ######obj_List############
-obj_list = fnc.Object_loc()
-obj_list.appendlist(box.list)
-
+obj_list = obj.Object_loc()
 ##########################
-
+5
 pygame.init()
 
-msec = 50
+msec = 75
 bg_size = (600,520)
 pygame.display.set_caption("First Game")
 bg = pygame.image.load('background.jpg')
-
 windows = pygame.display.set_mode(bg_size)
-player1 = pls.Player1(80,40,40,40,'player1')
-player2 = pls.Player2(440,440,40,40,'player2')
-bomb1 = bmb.Bomb_List1(player1)
-bomb2 = bmb.Bomb_List2(player2)
 
 run = True
 ###########MAIN_Loop####################
 while run:
 
-    ########## system check ###########
+
+    ########## system check ########
     pygame.time.delay(msec)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -55,17 +60,28 @@ while run:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_ESCAPE]:
         run = False
-    ###################################
+    ################################
 
-    player1.update(keys, bg_size)
-    player2.update(keys, bg_size)
-    player1.box_detect(box_loc)
-    player2.box_detect(box_loc)
+
+    ########### object check #######
+    obj_list.clear_list()
+    obj_list.appendlist(box.list)
+    obj_list.appendlist(bomb1.list)
+    obj_list.appendlist(bomb2.list)
+    obj_list.appendlist(player1)
+    obj_list.appendlist(player2)
+    ################################
+
+
+    ########## player move #########
+    player1.update(keys, bg_size, obj_list)
+    player2.update(keys, bg_size, obj_list)
+    ################################
 
 
     ##bomb
-    bomb1.clean(msec)
-    bomb2.clean(msec)
+    bomb1.clean(msec, players)
+    bomb2.clean(msec, players)
     bomb1.update(keys)
     bomb2.update(keys)
 
@@ -73,7 +89,6 @@ while run:
     redraw()
 
     
-
 
 
 
